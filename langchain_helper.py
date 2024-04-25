@@ -1,7 +1,7 @@
-from langchain.llms import GooglePalm
+from langchain_community.llms import GooglePalm
 from langchain.document_loaders.csv_loader import CSVLoader
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import faiss
+from langchain_community.vectorstores import faiss
 from dotenv import load_dotenv
 import os
 
@@ -17,4 +17,4 @@ instructor_embeddings = HuggingFaceEmbeddings()
 vectordb = faiss.from_documents(documents=docs, embedding=instructor_embeddings)
 
 retriever = vectordb.as_retriever
-rdocs = retriever.get_relevant_documents("for how long is this program")
+rdoc = retriever.get_relevant_documents("for how long is this program")
