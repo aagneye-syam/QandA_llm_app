@@ -16,5 +16,5 @@ instructor_embeddings = HuggingFaceEmbeddings()
 
 vectordb = faiss.from_documents(documents=docs, embedding=instructor_embeddings)
 
-
-
+retriever = vectordb.as_retriever
+rdocs = retriever.get_relevant_documents("for how long is this program")
