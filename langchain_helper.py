@@ -7,6 +7,9 @@ load_dotenv()
 
 llm = GooglePalm(google_api_key=os.environ["API_KEY"], temperature= 0.1)
 
-result = llm(input('Type here '))
+loader = CSVLoader(file_path='Q&A.csv',source_column='prompt')
+data = loader.load()
 
-print(result)
+
+# result = llm(input('Type here '))
+# print(result)
