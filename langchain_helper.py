@@ -12,7 +12,7 @@ load_dotenv()
 llm = GooglePalm(google_api_key=os.environ["API_KEY"], temperature=0.1)
 
 loader = CSVLoader(file_path='Q&A.csv', source_column='prompt')
-data = loader.load()
+docs = loader.load()
 
 instructor_embeddings = HuggingFaceInstructEmbeddings(
     model_name="hkunlp/instructor-large")
@@ -41,4 +41,3 @@ RetrievalQA(llm=llm, chain_type="stuff",
             return_source_documents=True,
             chain_type_kwargs={"prompt": PROMPT})
 
-chain("")
