@@ -11,14 +11,16 @@ load_dotenv()
 
 llm = GooglePalm(google_api_key=os.environ["API_KEY"], temperature=0.1)
 
-loader = CSVLoader(file_path='Q&A.csv', source_column='prompt')
-docs = loader.load()
 
 instructor_embeddings = HuggingFaceInstructEmbeddings(
     model_name="hkunlp/instructor-large")
 
-vectordb = FAISS.from_documents(
-    documents=docs, embedding=instructor_embeddings)
+
+def create_vector_db():
+    loader = CSVLoader(file_path='Q&A.csv', source_column='prompt')
+    docs = loader.load()
+    vectordb = FAISS.from_documents(documents=docs, embedding=instructor_embeddings)
+
 
 retriever = vectordb.as_retriever
 rdoc = retriever.get_relevant_documents("for how long is this program")
@@ -32,12 +34,11 @@ prompt_template = """Given the following context and a question, generate an ans
     QUESTION: {question}"""
 
 PROMPT = PromptTemplate(
-        template=prompt_template, input_variables=["context", "question"]
-    )
+    template=prompt_template, input_variables=["context", "question"]
+)
 
 RetrievalQA(llm=llm, chain_type="stuff",
             retriever=retriever,
             input_key="query",
             return_source_documents=True,
             chain_type_kwargs={"prompt": PROMPT})
-
