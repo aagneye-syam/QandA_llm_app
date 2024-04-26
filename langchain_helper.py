@@ -15,11 +15,13 @@ llm = GooglePalm(google_api_key=os.environ["API_KEY"], temperature=0.1)
 instructor_embeddings = HuggingFaceInstructEmbeddings(
     model_name="hkunlp/instructor-large")
 
+vectordb_file_path = "faiss_index"
 
 def create_vector_db():
     loader = CSVLoader(file_path='Q&A.csv', source_column='prompt')
     docs = loader.load()
     vectordb = FAISS.from_documents(documents=docs, embedding=instructor_embeddings)
+    vectordb.save_local(vectordb_file_path)
 
 
 retriever = vectordb.as_retriever
@@ -42,3 +44,8 @@ RetrievalQA(llm=llm, chain_type="stuff",
             input_key="query",
             return_source_documents=True,
             chain_type_kwargs={"prompt": PROMPT})
+
+
+if __name__ == "__main__" :
+    create_vector_db()
+    
