@@ -1,7 +1,7 @@
-from langchain_community.llms import GooglePalm
+from langchain.vectorstores import FAISS
+from langchain.llms import GooglePalm
 from langchain.document_loaders.csv_loader import CSVLoader
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.vectorstores import faiss
+from langchain.embeddings import HuggingFaceInstructEmbeddings
 from dotenv import load_dotenv
 import os
 
@@ -12,9 +12,9 @@ llm = GooglePalm(google_api_key=os.environ["API_KEY"], temperature=0.1)
 loader = CSVLoader(file_path='Q&A.csv', source_column='prompt')
 data = loader.load()
 
-instructor_embeddings = HuggingFaceEmbeddings()
+instructor_embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-large")
 
-vectordb = faiss.from_documents(documents=docs, embedding=instructor_embeddings)
+vectordb = FAISS.from_documents(documents=docs, embedding=instructor_embeddings)
 
 retriever = vectordb.as_retriever
 rdoc = retriever.get_relevant_documents("for how long is this program")
