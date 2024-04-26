@@ -20,7 +20,7 @@ vectordb_file_path = "faiss_index"
 
 def create_vector_db():
 
-    loader = CSVLoader(file_path='codebasics_faqs.csv', source_column="prompt")
+    loader = CSVLoader(file_path='Q&A.csv', source_column="prompt")
     data = loader.load()
 
     vectordb = FAISS.from_documents(documents=data,
@@ -59,3 +59,5 @@ def get_qa_chain():
 
 if __name__ == "__main__":
     create_vector_db()
+
+print(chain("how long is the program"))
