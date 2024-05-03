@@ -1,6 +1,6 @@
+import pathway as pw
 from langchain.vectorstores import FAISS
 from langchain.llms import GooglePalm
-from langchain.document_loaders.csv_loader import CSVLoader
 from langchain.embeddings import HuggingFaceInstructEmbeddings
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
@@ -20,8 +20,11 @@ vectordb_file_path = "faiss_index"
 
 def create_vector_db():
 
-    loader = CSVLoader(file_path='Q&A.csv', source_column="prompt")
-    data = loader.load()
+     data_stream = pw.io.fs.read(
+        path="Q&A.csv", mode="streaming", format="text", autocommit_duration_ms=50
+    )
+
+    # data = loader.load()
 
     vectordb = FAISS.from_documents(documents=data,
                                     embedding=instructor_embeddings)
