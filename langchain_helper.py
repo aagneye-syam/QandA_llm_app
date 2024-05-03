@@ -34,6 +34,8 @@ def create_vector_db():
 
     vectordb = FAISS.from_documents(documents=embedded_data)
 
+    vectordb.save_local(vectordb_file_path)
+
 
 def get_qa_chain():
 
