@@ -32,6 +32,8 @@ def create_vector_db():
         "embedder", context=documents, data_to_embed=pw.this.texts, model=instructor_embeddings
     )
 
+    vectordb = FAISS.from_documents(documents=embedded_data)
+
 
 def get_qa_chain():
 
