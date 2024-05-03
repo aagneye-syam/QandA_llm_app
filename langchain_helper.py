@@ -28,6 +28,10 @@ def create_vector_db():
     documents = data_stream.select(texts=parser(pw.this.data))
     documents = documents.flatten(pw.this.texts)
 
+    embedded_data = pw.call(
+        "embedder", context=documents, data_to_embed=pw.this.texts, model=instructor_embeddings
+    )
+
 
 def get_qa_chain():
 
