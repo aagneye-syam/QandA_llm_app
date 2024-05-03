@@ -20,16 +20,13 @@ vectordb_file_path = "faiss_index"
 
 def create_vector_db():
 
-     data_stream = pw.io.fs.read(
+    data_stream = pw.io.fs.read(
         path="Q&A.csv", mode="streaming", format="text", autocommit_duration_ms=50
     )
 
-    # data = loader.load()
-
-    vectordb = FAISS.from_documents(documents=data,
-                                    embedding=instructor_embeddings)
-
-    vectordb.save_local(vectordb_file_path)
+    parser = pw.xpacks.llm.parsers.ParseUnstructured()
+    documents = data_stream.select(texts=parser(pw.this.data))
+    documents = documents.flatten(pw.this.texts)
 
 
 def get_qa_chain():
